@@ -17,13 +17,12 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "install": "set ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ && node ./node_modules/electron/install.js",
-    "start": "react-app-rewired start",
+    "start": "concurrently \"npm run start:react\" \"npm run start:electron\"",
+    "start:react": "cross-env BROWSER=none react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
-    "start-electron": "cross-env NODE_ENV=development electron .",
-    "start:electron": "electron app",
+    "start:electron": "wait-on http://localhost:3000 && electron app",
     "start-electron-prod": "electron ."
   },
   "eslintConfig": {
@@ -42,8 +41,10 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "cross-env": "^7.0.2",
     "electron": "^8.0.0",
-    "react-app-rewired": "^2.1.5"
+    "react-app-rewired": "^2.1.5",
+    "wait-on": "^4.0.1"
   }
 }
