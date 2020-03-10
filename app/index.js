@@ -21,7 +21,32 @@ function createWindow() {
     });
 }
 
-app.on('ready', createWindow);
+// 开发工具
+const isDev = require('electron-is-dev')
+
+// electron-debug
+isDev && require('electron-debug')({
+    enable: true,
+    showDevTools: false,
+})
+
+// Chromium
+function createDevTools() {
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, MOBX_DEVTOOLS } = require('electron-devtools-installer')
+    // devtron
+    const devtronExtension = require('devtron');
+    devtronExtension.install();
+    // react工具
+    installExtension(REACT_DEVELOPER_TOOLS);
+    installExtension(MOBX_DEVTOOLS);
+}
+
+
+app.on('ready', () => {
+    createWindow();
+    // 开发环境启动开发工具
+    isDev && createDevTools();
+});
 
 // 当全部窗口关闭时退出。
 app.on('window-all-closed', () => {
@@ -35,3 +60,4 @@ app.on('activate', () => {
         createWindow();
     }
 });
+
